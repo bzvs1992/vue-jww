@@ -8,7 +8,9 @@
       <img :src="doll.imgurl" v-if=" doll.showtype == 'thing' " alt="">
     </div>
     <div class="doll_img_name" :class="{'doll_img_name_ticket': doll.showtype == 'virtual', 'doll_img_name_gift': doll.showtype == 'giftpack', 'doll_img_name_goods': doll.showtype == 'thing'}">
-      <div class="doll_img_txt">{{ doll.showtype == 'thing' ? doll.name : ''}}</div>
+      <div class="doll_txt_wp">
+      <div class="doll_img_txt"><span class="gift_name">{{ doll.name }}</span></div>
+    </div>
     </div>
     <i class="doll_body"></i> </div>
 </template>

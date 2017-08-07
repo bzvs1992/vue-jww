@@ -3,30 +3,30 @@
 -->
 <template>
   <section class="wrap wp02" v-scroll="showPageno">
-  <div class="tab_area">
-    <div class="tab_nav">
-      <ul>
-        <li @click="filterNoadr" :class="{ 'on':recordsIdx == 0 }">待填写</li>
-        <li @click="filterOut" :class="{ 'on':recordsIdx == 3 }">待发放</li>
-        <li @click="filterGood" :class="{ 'on':recordsIdx == 1 }">已中奖</li>
-        <li @click="filterAll" :class="{ 'on':recordsIdx == 2 }">全部</li>
-      </ul>
-    </div>
-    <div class="tab_cont">
-      <div class="tab_list">
+    <div class="tab_area">
+      <div class="tab_nav">
         <ul>
-          <li v-for="(record, index) in recordsShow" :key="index" @click="showAddr(record)">
-              <Record :record="record" />
-          </li>
+          <li @click="filterNoadr" :class="{ 'on':recordsIdx == 0 }">待填写</li>
+          <li @click="filterOut" :class="{ 'on':recordsIdx == 3 }">待发放</li>
+          <li @click="filterGood" :class="{ 'on':recordsIdx == 1 }">已中奖</li>
+          <li @click="filterAll" :class="{ 'on':recordsIdx == 2 }">全部</li>
         </ul>
-        <div class="p_btn_wp">
-        <a href="#" class="p_btn" title="返回夹娃娃" @click.prevent="goGame">返回夹娃娃</a>
+      </div>
+      <div class="tab_cont">
+        <div class="tab_list">
+          <ul>
+            <li v-for="(record, index) in recordsShow" :key="index" @click="showAddr(record)" v-if="index >= 0">
+              <Record :record="record" />
+            </li>
+          </ul>
+          <div class="p_btn_wp">
+            <a href="#" class="p_btn" title="返回夹娃娃" @click.prevent="goGame">返回夹娃娃</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- 填写收货信息 -->
+    <!-- 填写收货信息 -->
     <transition name="fadein">
       <div class="mpop_box" v-if="isAddr">
         <div class="mpop_hd">
@@ -60,61 +60,64 @@
         </div>
       </div>
     </transition>
-</section>
+  </section>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
-import Record from './record';
+  import Record from './Record';
 
-export default {
-  name: 'records',
-  components: {
-    Record
-  },
-  computed: mapState([
-    "h5url",
-    "openid",
-    "records",
-    "recordsShow",
-    "pageno",
-    "recordsIdx",
-    "isAddr",
-    "myname",
-    "myphone",
-    "myqq",
-    "myxunlei",
-    "myaddress",
-    "prizeType",
-    "ticket_id"
-  ]),
-  methods: {
-      goGame(){
-          this.$router.go(-1);
+  export default {
+    name: 'app',
+    components: {
+      Record
+    },
+    data() {
+      return {
+        h5url: 'https://h5.niu.xunlei.com/',
+        appid: "wx33d87c078872bf59", // 微信appid
+        // openid: 'betatest_lupinyi',  // debub 调试
+        openid: '',
+        // tokenid:'ec0ca37f332afa2a49ba48e74d374774', // debug 调试
+        tokenid: '',
+        prizeType: '', // 奖品类型
+        myqq: '', // QQ号码
+        myaddress: '', // 收货地址
+        myname: '', // 姓名
+        myphone: '', // 手机号码
+        myxunlei: '', // 迅雷帐号
+        isAddr: false, // 填写收货地址
+        isAddrShow: false, // 是否显示填写地址
+        records: [], // 总的中奖记录
+        recordsShow: null, // filter后展示的记录
+        recordsIdx: 2, // 2为显示全部, 1为已领取，0为待填写
+        pageno: 1, // 记录页数
+        ticket_id: '',
+      }
+    },
+    methods: {
+      goGame() {
+        window.location.href = 'https://game.niu.xunlei.com/dfw/jww.html';
       },
-      showPageno(e){
+      showPageno(e) {
         let self = this;
-        if((e.target.scrollTop / 80) > 14*self.pageno){
-          self.$store.commit('addPageno');
+        if ((e.target.scrollTop / 80) > 14 * self.pageno) {
+          self.pageno = self.pageno + 1;
           self.getRecords();
         }
         // console.log(e.target.scrollTop / 80)
       },
       showAddr(record) {
-        console.log(record);
-        if(record.state == 1){
-          this.$store.commit('setPrize', record.pro_info);
-          this.$store.commit('setTicketId', record.ticket_id);
-          this.$store.commit('setSuc', false);
-          this.$store.commit('setPop', true);
-          this.$store.commit('setAddr', true);
+        if (record.state == 1) {
+          this.prize = record.pro_info.name;
+          this.prizeType = record.pro_info.type;
+          this.ticket_id = record.ticket_id;
+          this.isPop = true;
+          this.isAddr = true;
         }
       },
       cloPop() {
-        this.$store.commit('setPop', false);
-        this.$store.commit('setIntro', false);
-        this.$store.commit('setSuc', false);
-        this.$store.commit('setAddr', false);
+        this.isPop = false;
+        this.isAddr = false;
       },
       subAddr() {
         let self = this;
@@ -144,45 +147,85 @@ export default {
         });
       },
       setName(e) {
-        this.$store.commit('setName', e.target.value);
+        this.myname = e.target.value;
       },
       setQQ(e) {
-        this.$store.commit('setQQ', e.target.value);
+        this.myqq = e.target.value;
       },
       setAddress(e) {
-        this.$store.commit('setAddress', e.target.value);
+        this.myaddress = e.target.value;
       },
       setPhone(e) {
-        this.$store.commit('setPhone', e.target.value);
+        this.myphone = e.target.value;
       },
       setXunlei(e) {
-        this.$store.commit('setXunlei', e.target.value);
+        this.myxunlei = e.target.value;
       },
-      getRecords(){
+      getRecords() {
         let self = this;
-        self.$http.jsonp(self.h5url + 'lottery/dolls/querylog?openid=' + self.openid + '&pageno=' + self.pageno + '&state=0', {
-          jsonp: 'cb'
-        }).then(function(res){
-            if(res.body.rtn == 0){
-              self.$store.commit('setRecords', res.body.data.record);
-            }else{
-              console.log(res.body.errinfo);
-            }
-        }, function(err){
-            console.log('后台无反应');
+        self.$http.jsonp(self.h5url + 'lottery/dolls/querylog?openid=' + self.openid + '&pageno=' + self.pageno +
+          '&state=0', {
+            jsonp: 'cb'
+          }).then(function (res) {
+          if (res.body.rtn == 0) {
+            self.records = self.records.concat(res.body.data.record);
+            self.recordsShow = self.records.filter((v, i) => (v.state));
+          } else {
+            console.log(res.body.errinfo);
+          }
+        }, function (err) {
+          console.log('后台无反应');
         });
       },
-      ...mapMutations([
-        "filterNoadr",
-        "filterGood",
-        "filterAll",
-        "filterOut",
-        "addPageno"
-      ]),
-  },
-  mounted(){
-      this.getRecords();
+      filterNoadr() {
+        this.recordsShow = this.records.filter((v, i) => (v.state == 1));
+        this.recordsIdx = 0;
+      },
+      filterGood() {
+        this.recordsShow = this.records.filter((v, i) => (v.state == 2));
+        this.recordsIdx = 1;
+      },
+      filterAll() {
+        this.recordsShow = this.records.filter((v, i) => (v.state));
+        this.recordsIdx = 2;
+      },
+      filterOut() {
+        this.recordsShow = this.records.filter((v, i) => (v.state == 3));
+        this.recordsIdx = 3;
+      },
+      addPageno() {
+        this.pageno++;
+      },
+      loginTo() {
+        let href = location.href;
+        let redirect_uri = encodeURIComponent(href);
+        redirect_uri = encodeURIComponent(this.h5url + "wechat/openid?redirect=" + redirect_uri);
+        let url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + this.appid + '&redirect_uri=' +
+          redirect_uri + '&response_type=code&scope=snsapi_base&state=login#wechat_redirect';
+        location.href = url;
+      }
+    },
+    mounted() {
+      let self = this;
+      self.getRecords();
+      return;
+      let _openid = self.$cookie.get('openid'),
+        _tokenid = self.$cookie.get('tokenid');
+      if (_openid) {
+        self.openid = _openid;
+        self.tokenid = _tokenid;
+        // console.log(_openid);
+        self.$cookie.set('openid', _openid, {
+          domain: '.xunlei.com'
+        });
+        self.$cookie.set('tokenid', _tokenid, {
+          domain: '.xunlei.com'
+        });
+        self.getRecords();
+      } else {
+        self.loginTo();
+      }
+    }
   }
-}
-</script>
 
+</script>

@@ -222,7 +222,7 @@
         openid: '',
         // tokenid:'ec0ca37f332afa2a49ba48e74d374774', // debug 调试
         tokenid: '',
-        pro_id: '1',
+        pro_id: 1,
         isBtnOn: false, // 开始按钮点击
         isPop: false, // 是否显示浮层背景
         isHole: false, // 打开黑洞
@@ -355,13 +355,15 @@
         self.isDown = true;
         self.isOpen = true;
         setTimeout(function () {
-          if (Math.abs(self.count) % 49 > 14) {
+          let distX = 98 - (Math.abs(self.count) % 98);
+          if (distX < 35 || distX >63) {
             // 抓到娃娃 
             let j = parseInt((self.count + _dolls.length * self.dollw) / 49);
             let idx = parseInt(((_dolls.length + 1) * 2 - j) / 2);
             let idxon = idx >= _dolls.length ? idx - _dolls.length : idx;
             self.idx = idx;
             self.idxon = idxon;
+            self.pro_id = self.dolls[idxon].id;
             self.isShow = true;
             self.isDown = false;
             self.got = 1;

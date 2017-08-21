@@ -2374,70 +2374,23 @@ body {
   bottom: 0;
   z-index: 1;
 }
+.doll_img_face{ width:69px; height: 37px; position: absolute; top: 10px; left: 17px; z-index: 2; }
+.doll_img_face1{background-position:-81px -5px; }
+.doll_img_face2{background-position:-174px -5px; }
+.doll_img_face3{background-position:-83px -50px; }
+.doll_img_name{ position: absolute; left: 0; right: 0; margin: auto; z-index: 4;}
+.doll_img_name_goods{ background-position:-90px -4px; width: 65px; height: 25px; padding-top: 20px; top: 45px;}
+.doll_img_name_gift{ background-position:-4px -2px; width: 70px; height: 26px; padding-top: 18px; top: 40px;}
+.doll_img_name_ticket{background-position:-165px -2px; width: 70px; height: 30px; padding-top: 15px; top: 40px;}
+.doll_img_goods{ position: absolute; left: 0; top: 52px; right: 0; z-index:5; margin: auto;  width: 20%;}
 
-.doll_img_face {
-  width: 69px;
-  height: 37px;
-  position: absolute;
-  top: 10px;
-  left: 17px;
-  z-index: 2;
-}
-
-.doll_img_face1 {
-  background-position: -81px -5px;
-}
-
-.doll_img_face2 {
-  background-position: -174px -5px;
-}
-
-.doll_img_face3 {
-  background-position: -83px -50px;
-}
-
-.doll_img_name {
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin: auto;
-  z-index: 4;
-}
-
-.doll_img_name_goods {
-  background-position: -90px -4px;
-  width: 65px;
-  height: 45px;
-  top: 45px;
-}
-
-.doll_img_name_gift {
-  background-position: -4px -2px;
-  width: 70px;
-  height: 44px;
-  top: 40px;
-}
-
-.doll_img_name_ticket {
-  background-position: -165px -2px;
-  width: 70px;
-  height: 44px;
-  top: 40px;
-}
-
-.doll_img_txt {
-  color: #f8c23f;
-  padding-top: 34px;
-  box-sizing: border-box;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 12px;
-  line-height: 1;
-  margin: 0 auto;
-  display: block;
-  transform: scale(.85);
-}
+.doll_txt_wp{width: 72px; height: 24px; position: relative; margin: 0 auto; overflow: hidden; }
+.doll_img_txt{ color: #f8c23f; position: relative; padding-top: 12px; font-size:12px; line-height: 13px; text-align: center; transform:scale(.7);}
+.gift_name{ margin: 0 auto; width: 100%; text-align: center;}
+.doll_img_name_gift .doll_img_txt,.doll_img_name_ticket .doll_img_txt{ color: #fff; padding-top: 0; }
+.doll_img_name_goods .doll_txt_wp{ width: 60px;}
+.doll_img_name_goods .doll_img_txt{ width: 200%; height: 24px;}
+.doll_img_name_goods .doll_img_txt .gift_name{ height: 24px; overflow: hidden;}
 
 .doll_img_goods {
   position: absolute;
@@ -3220,7 +3173,7 @@ body {
 
 
 
-/** 动画  **/
+/** 添加的动画  **/
 .btn_down {
   transition: transform .1 linear;
 }
@@ -3370,3 +3323,43 @@ body {
 .tab_cont{padding-bottom:60px;}
 
 .tips_box{background:#000; border-radius:5px; opacity:0.4; color:#fff; padding:5px; text-align:center; position: absolute; top: 140px; left: 80px; right: 80px;  height: 20px; line-height: 20px; margin: 0 auto; z-index: 90; }
+
+
+/** 添加的动画  **/
+
+
+.doll_img_name_goods .doll_img_txt {-webkit-animation:marquee 4s linear infinite; animation:marquee 4s linear infinite;}
+@-webkit-keyframes marquee{
+	0%{left:0;}
+	100%{left:-100%;}
+}
+@keyframes marquee{
+	0%{left:0;}
+	100%{left:-100%;}
+}
+
+.gift_name {
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+}
+
+.doll_img_name_goods .doll_img_txt {
+    width: 200%;
+    height: 24px;
+}
+.doll_txt_wp {
+    width: 60px;
+    height: 24px;
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.doll_img_name_goods .doll_txt_wp {
+    width: 60px;
+}
+
+.doll_img_name_goods .doll_img_txt .gift_name{
+  height: 24px;
+  overflow: hidden;
+}

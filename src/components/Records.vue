@@ -15,7 +15,7 @@
       <div class="tab_cont">
         <div class="tab_list">
           <ul>
-            <li v-for="(record, index) in recordsShow" :key="index" @click="showAddr(record)" v-if="index >= 0">
+            <li v-for="(record, index) in recordsShow" :key="index" @click.stop="showAddr(record)" v-if="index >= 0">
               <Record :record="record" />
             </li>
           </ul>
@@ -169,7 +169,7 @@
           }).then(function (res) {
           if (res.body.rtn == 0) {
             self.records = self.records.concat(res.body.data.record);
-            self.recordsShow = self.records.filter((v, i) => (v.state));
+            self.recordsShow = self.records.filter((v, i) => (v.ticket_id));
           } else {
             console.log(res.body.errinfo);
           }
@@ -186,7 +186,7 @@
         this.recordsIdx = 1;
       },
       filterAll() {
-        this.recordsShow = this.records.filter((v, i) => (v.state));
+        this.recordsShow = this.records.filter((v, i) => (v.ticket_id));
         this.recordsIdx = 2;
       },
       filterOut() {
@@ -207,8 +207,8 @@
     },
     mounted() {
       let self = this;
-      self.getRecords();
-      return;
+      // self.getRecords();
+      // return;
       let _openid = self.$cookie.get('openid'),
         _tokenid = self.$cookie.get('tokenid');
       if (_openid) {
